@@ -4,17 +4,28 @@ import (
 	"fmt"
 	"log"
 	"chatboy-server/models"
-	"chatboy-server/routes"
+	"chatboy-server/handlers"
 	// "reflect"
 )
 
+type Env struct {
+	db *sql.DB
+}
 
 func main() {
 
-	var connection *sql.DB 
-	connection = dbConnect()
-	// fmt.Println(reflect.TypeOf(connection))
-	dbTest(connection)
+	myDB, err := models.DbConnect()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	myEnv := &Env{db: myDB}
+
+	models.DbTest(connection)
 	
 }
+
+
+
+// func prepareEnv() {}
 

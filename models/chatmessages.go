@@ -8,6 +8,8 @@ type ChatMessage struct {
 	timestamp	string
 }
 
-//TODO: Transcript(db *sql.DB, chatID int)
+func Transcript(db *sql.DB, chatID int) {
+	
+}
 
 //TODO

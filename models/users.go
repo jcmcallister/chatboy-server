@@ -11,4 +11,4 @@ type User struct {
 // TODO: get active, i.e. logged-in, users of type Rep
 	// VIEW TODO: if any Rep is active, show the chat action box
 
-// TODO: 
+// TODO: func *sql.DB AllUsers 
