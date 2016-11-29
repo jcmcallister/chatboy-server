@@ -10,29 +10,27 @@ var MySQLStore = require('express-mysql-session')(session);
 var requireFu = require('require-fu');
 
 
-var config = {
-	'PORT_FRONTEND' : 3000,
-	'PORT_APP' 		: 3000,
-	'DB_HOST' 		: 'localhost',
-	'DB_PORT' 		: 3306,
-	'DB_USER' 		: 'chatboy',
-	'DB_PASS' 		: 'foobar',
-	'APP_ROOT'		: __dirname
-};
+
+app.set('PORT_FRONTEND', 3000);
+app.set('PORT_APP', 3000);
+app.set('DB_HOST', 'localhost');
+app.set('DB_PORT', 3306);
+app.set('DB_USER', 'chatboy');
+app.set('DB_PASS', 'foobar');
 
 
 // DB Config
-var dbOptions = new ({
-	host 			: config['DB_HOST'],
-	port 			: config['DB_PORT'],
-	user 			: config['DB_USER'],
-	password 		: config['DB_PASS'],
+var dbOptions = ({
+	host 			: app.get('DB_HOST'),
+	port 			: app.get('DB_PORT'),
+	user 			: app.get('DB_USER'),
+	password 		: app.get('DB_PASS'),
 	database 		: 'chatboy',
 	connectionLimit	: 10
 });
 
 var dbPool = mysql.createPool(dbOptions);
-
+app.set('DB', dbPool);
 
 // Session Config
 var sessionStore = new MySQLStore({
@@ -73,6 +71,6 @@ requireFu(__dirname + '/routes/api')(app);
 
 
 
-app.listen(config['PORT_APP'], function () {
-	console.log('Chatboy :: Listening on port ' + config['PORT_APP'] + "...");
+app.listen(app.get('PORT_APP'), function () {
+	console.log('Chatboy :: Listening on port ' + app.get('PORT_APP') + "...");
 })
