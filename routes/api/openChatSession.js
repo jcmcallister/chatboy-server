@@ -16,6 +16,8 @@ module.exports = function(app) {
 		//upsert a session for this user!
 			//happens automatically at the end of the request if we do anything with "req.session"
 
+		var data = {};
+
 		req.session.name = req.body.name;
 		req.session.email = req.body.email;
 
@@ -26,9 +28,9 @@ module.exports = function(app) {
 
 		//save the user's name & email into ChatSessionUsers
 
+		data["chatID"] = "";
 
-		console.log(JSON.stringify(req.body));
 
-		res.send("("+ req.params.name + ") is opening a chat session!");
+		res.send(data);
 	});
 };

@@ -74,5 +74,5 @@ requireFu(__dirname + '/routes/api')(app);
 
 
 app.listen(config['PORT_APP'], function () {
-	console.log('Example app listening on port ' + config['PORT_APP']);
+	console.log('Chatboy :: Listening on port ' + config['PORT_APP'] + "...");
 })
