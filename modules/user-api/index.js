@@ -11,3 +11,10 @@ app.post('/', function(req, res, next) {
     //     res.json(user); // return user json if ok
     // });
 });
+
+app.post('/startChat', function(req, res, next) {});
+app.post('/endChat', function(req, res, next) {});
+
+app.post('/getTranscript', function(req, res, next) {});
+
+app.post('/rateRep', function(req, res, next) {});

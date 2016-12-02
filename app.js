@@ -45,12 +45,7 @@ app.disable('x-powered-by');
 // Routing -- Static Files served from Root, e.g. /css/styles.css, /index.html, etc.
 app.use(express.static( path.join(__dirname + '/dist') ));
 
-
-// Routing -- Dynamic, Requirable files
-requireFu(__dirname + '/routes')(app);
-requireFu(__dirname + '/routes/api')(app);
-
-// Mount our various APIs as sub-apps
+// Routing -- APIs : Mount our various APIs as sub-apps with their own routes
 app.use('/api/users', require("./modules/user-api"));
 app.use('/api/reps', require("./modules/rep-api"));
 app.use('/api/chat', require("./modules/chat-api"));

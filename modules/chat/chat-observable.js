@@ -7,6 +7,6 @@ function ChatObservable() {
 
 util.inherits(ChatObservable, EventEmitter);
 
-ChatObservable.prototype.sendMessage = function(chatID, message) {
-	this.emit('new-message', message);
+ChatObservable.prototype.message = function(chatID, message) {
+	this.emit('newMessage', message);
 };

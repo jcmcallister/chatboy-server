@@ -11,3 +11,22 @@ app.post('/', function(req, res, next) {
     //     res.json(user); // return user json if ok
     // });
 });
+
+//app.post('/getChatQueue', function(req,res,next){}); // reps may have multiple users waiting to chat at a time
+
+app.get('/getRatings', function(req,res,next){
+	// gets all ratings where User ID is the same as the actively logged-in [Rep] user
+});
+
+//app.post('/joinChat', function(req,res,next){}); // reps choose a chat from their queue and jump in to one of 'em
+app.post('/login', function(req,res,next){
+	// impacts chat availability status
+	// given the basic auth, switches the active flag to True
+
+});
+app.post('/logout', function(req,res,next){
+	// impacts chat availability status
+	// switches active flag to False
+
+	
+});
