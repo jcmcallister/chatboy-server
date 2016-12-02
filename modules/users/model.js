@@ -1,17 +1,26 @@
-//how do i get data from a config object, or must i require them explicitly?
-//TODO: use app.get('foo')
-var db = app.get('DB');
+function userModel (options) {  
+  var db;
 
-var conn = db.createConnection({
-	host 		: app.get('DB_HOST'),
-	user 		: app.get('DB_USER'),
-	password	: app.get('DB_PASS')
-});
+  if (!options.db) {
+    throw new Error('Options needs property `db` to retrieve the User Model');
+  }
 
-var User = {
-	name	: true,
-	email	: false,
-	active	: (true ? true : false)
-};
+  db = options.db;
 
-module.exports = mongoose.model('user', User);
+  return {
+    create: function (cb) {
+      // db.query('INSERT ...', cb);
+    },
+    get: function(cb) {
+    	// db.query('SELECT ...', cb);
+    },
+    update: function(cb) {
+    	// db.query('UPDATE ...', cb);
+    },
+    delete: function(cb) {
+    	// db.query('DELETE ...', cb);
+    }
+  }
+}
+
+module.exports = userModel;  

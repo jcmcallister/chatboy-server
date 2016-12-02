@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 var app = express();
 
@@ -9,34 +10,14 @@ var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var requireFu = require('require-fu');
 
-
-
-app.set('PORT_FRONTEND', 3000);
-app.set('PORT_APP', 3000);
-app.set('DB_HOST', 'localhost');
-app.set('DB_PORT', 3306);
-app.set('DB_USER', 'chatboy');
-app.set('DB_PASS', 'foobar');
-
-
-// DB Config
-var dbOptions = ({
-	host 			: app.get('DB_HOST'),
-	port 			: app.get('DB_PORT'),
-	user 			: app.get('DB_USER'),
-	password 		: app.get('DB_PASS'),
-	database 		: 'chatboy',
-	connectionLimit	: 10
-});
-
-var dbPool = mysql.createPool(dbOptions);
-app.set('DB', dbPool);
+var config = require("./config");
+var db = require("./modules/db");
 
 // Session Config
 var sessionStore = new MySQLStore({
 	checkExpirationInterval: 15*1000*60, // mins * ms * seconds
 	createDatabaseTable: true // if it doesn't exist
-}, dbPool);
+}, db);
 
 
 // Use a Different Session Middleware
@@ -69,8 +50,11 @@ app.use(express.static( path.join(__dirname + '/dist') ));
 requireFu(__dirname + '/routes')(app);
 requireFu(__dirname + '/routes/api')(app);
 
+// Mount our various APIs as sub-apps
+app.use('/api/users', require("./modules/user-api"));
+app.use('/api/reps', require("./modules/rep-api"));
+app.use('/api/chat', require("./modules/chat-api"));
 
-
-app.listen(app.get('PORT_APP'), function () {
-	console.log('Chatboy :: Listening on port ' + app.get('PORT_APP') + "...");
+app.listen(config.web.port, function () {
+	console.log('Chatboy :: Listening on port ' + config.web.port + "...");
 })
