@@ -1,4 +1,5 @@
-var users = require("../users");
+var user = require("../users");
+var chat = require("../chat");
 
 var express = require("express");
 var app = module.exports = express();
@@ -31,25 +32,26 @@ app.post("/start/", function(req, res, next) {
 
 	console.info("Opening Chat for " + req.body.name + " (email: " + req.body.email + " )");
 
-	//upsert a session for this user!
-		//happens automatically at the end of the request if we do anything with "req.session"
-
-	var data = {};
+	var resData = {}, data = {};
 
 	req.session.name = req.body.name;
 	req.session.email = req.body.email;
 
-	//save the user's name & email into Users
+	//save the user's name & email into Users OR just get it if user already existed
+	user.create(req.session,function(userID){
+		console.log("chat-api/start :: user created in DB!");
+		data["userID"] = userID;
+		req.session.userID = userID;
+	});
+
+	//save the user's name & email into ChatSessions & hookup to ChatSessionUsers
+	chat.startNewSession();
 	
 
-	//save the user's name & email into ChatSessions
-
-	//save the user's name & email into ChatSessionUsers
-
-	data["chatID"] = "";
+	resData["chatID"] = "";
 
 
-	res.send(data);
+	res.send(resData);
 });
 
 app.post("/message/", function(req, res, next) {});

@@ -14,7 +14,7 @@ module.exports = {
             rv = false,
             cacheVar = req.app.locals.cache.get("chatAvailable");
         
-        console.log("Rep/index :: getting list of active reps!");
+        console.log("Rep/index :: are there any active reps?");
         
         // we cache if Reps are available, since we don't want to pummel the DB more than once every 30 seconds
         if(cacheVar == undefined || cacheVar == false) {

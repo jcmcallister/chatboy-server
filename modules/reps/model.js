@@ -23,18 +23,10 @@ function repModel (options) {
     	// db.query('DELETE ...', cb);
     },
     listActiveReps: function(cb) {
-      db.getConnection(function(err, connection) {
-        // Use the connection 
-        connection.query( 'SELECT * FROM users WHERE active = true AND typeID = (SELECT typeID from usertypes WHERE typeName = \'rep\');', function(err, rows) {
-          if (err) throw err;
+      db.query( 'SELECT * FROM users WHERE active = true AND typeID = (SELECT typeID from usertypes WHERE typeName = \'rep\');', function(err, rows) {
+        if (err) throw err;
 
-          cb(rows);
-
-          // And done with the connection. 
-          connection.release();
-
-          // Don't use the connection here, it has been returned to the pool. 
-        });
+        cb(rows);
       });
     },
     login: function(cb) {
@@ -47,4 +39,4 @@ function repModel (options) {
   };
 }
 
-module.exports = repModel;  
+module.exports = repModel;
