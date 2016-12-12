@@ -12,9 +12,9 @@ app.post('/', function(req, res, next) {
     // });
 });
 
-app.post('/startChat', function(req, res, next) {});
-app.post('/endChat', function(req, res, next) {});
+// app.post('/startChat', function(req, res, next) {});
+// app.post('/endChat', function(req, res, next) {});
 
-app.post('/getTranscript', function(req, res, next) {});
+// app.post('/getTranscript', function(req, res, next) {});
 
 app.post('/rateRep', function(req, res, next) {});

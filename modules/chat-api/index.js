@@ -40,7 +40,7 @@ app.post("/start/", function(req, res, next) {
 	req.session.email = req.body.email;
 
 	//save the user's name & email into Users
-
+	
 
 	//save the user's name & email into ChatSessions
 

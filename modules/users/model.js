@@ -23,4 +23,4 @@ function userModel (options) {
   }
 }
 
-module.exports = userModel;  
+module.exports = userModel;

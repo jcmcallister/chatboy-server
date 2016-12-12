@@ -5,6 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
 var mysql = require('mysql');
+
 var path = require('path');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
@@ -18,7 +19,6 @@ var sessionStore = new MySQLStore({
 	checkExpirationInterval: 15*1000*60, // mins * ms * seconds
 	createDatabaseTable: true // if it doesn't exist
 }, db);
-
 
 // Use a Different Session Middleware
 app.use(
