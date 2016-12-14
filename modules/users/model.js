@@ -15,9 +15,9 @@ function userModel (options) {
             }
 
             //no email found, create the new non-rep customer user
-            db.query('INSERT INTO users VALUES (NULL,"'+ options.name +'","'+ options.email +'", 1, '+ typeId +')', function(rows){
+            db.query('INSERT INTO users VALUES (NULL,"'+ options.name +'","'+ options.email +'", 1, '+ typeId +')', function(err, result){
                 console.log("Users/Model :: create() : Record Inserted for new user!");
-                cb(rows);
+                cb(result.insertId);
             });
 
         },

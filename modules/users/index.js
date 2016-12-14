@@ -25,10 +25,7 @@ module.exports = {
 				        options.usertype = userType;
 					});
 
-					user.create(userType, function(rows){
-						user.get(function(userRow){
-							userId = userRow[0]['id'];
-						});
+					user.create(userType, function(userId){
 		    			cb(userId);
 		    		});
 

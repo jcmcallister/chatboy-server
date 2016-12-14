@@ -42,18 +42,18 @@ module.exports = {
 			model.requestRep(returnData.chatId, addRepToChat);
 		}
 
-		function addRepToChat(repId) {
+		function addRepToChat(repRow) {
 			//assert: repName is not empty, not falsey
 
 			console.log("chat/index :: startNewSession() : adding our rep user to chat...");
 
 			// if repName is falsey, no rep is available right now. TODO: user & rep queuing?
-			if(!repId || repId == ''){
+			if(!repRow || typeof repRow === 'string'){
 		        throw new Error('No Reps were available!');
 		    }
 
-			returnData["repId"] = repId;
-			model.createChatUser(returnData.chatId, repId, sendBack);
+			returnData["repName"] = repRow.name;
+			model.createChatUser(returnData.chatId, repRow.id, sendBack);
 
 		}
 

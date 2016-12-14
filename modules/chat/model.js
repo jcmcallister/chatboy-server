@@ -13,7 +13,7 @@ function chatModel (options) {
                 console.log("Chat/Model :: createChat() : Empty Chat Session Created!");
 
                 // console.log("Chat/Model :: createChat() : Result of INSERT:" + JSON.stringify(result) );
-                
+
                 //get the new chat's Id
                 cb(result.insertId);
                 
@@ -35,7 +35,8 @@ function chatModel (options) {
                     // throw new Error("no available reps were found!");
 
                 }else {
-                    rv = repRow[0]["id"];
+                    // console.log("Chat/Model :: requestRep() : rep row is " + JSON.stringify(repRow));
+                    rv = repRow[0];
                 }
 
                 cb(rv);
