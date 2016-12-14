@@ -2,16 +2,16 @@ var db = require("../db");
 var userModel = require("./model");
 
 module.exports = {
-    create: function(data, cb) {
+    saveUserInfo: function(data, cb) {
     	if(typeof data.name !== undefined && typeof data.email !== undefined) {
-    		// make sure data 
+
     		var options = {
     			db: db,
     			name: data.name,
     			email: data.email	
     		};
     		var user = userModel(options),
-    			userID = -1;
+    			userId = -1;
 
     		//does this user exist already?
     		user.get(function(rows){
@@ -27,9 +27,9 @@ module.exports = {
 
 					user.create(userType, function(rows){
 						user.get(function(userRow){
-							userID = userRow[0]['id'];
+							userId = userRow[0]['id'];
 						});
-		    			cb(userID);
+		    			cb(userId);
 		    		});
 
 				} else {

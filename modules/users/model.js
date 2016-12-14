@@ -1,60 +1,60 @@
 function userModel (options) {  
-  var db;
+    var db;
 
-  if (!options.db) {
-    throw new Error('Options needs property `db` to retrieve the User Model');
-  }
-
-  db = options.db;
-
-  return {
-
-    create: function (typeID, cb) {
-      if(typeof options.email === undefined || typeof options.name === undefined) {
-        throw new Error('Users/Model :: create() : Missing `email` or `name` from options object');
-      }
-
-      //no email found, create the new non-rep customer user
-      db.query('INSERT INTO users VALUES (NULL,"'+ options.name +'","'+ options.email +'", 1, '+ typeID +')', function(rows){
-        console.log("Users/Model :: create() : Record Inserted for new user!");
-        cb(rows);
-      });
-
-    },
-
-    get: function(cb) {
-      if(typeof options.email === undefined) {
-        throw new Error('Users/Model :: get() : Missing `email` from options object');
-      }
-    	db.query('SELECT * FROM users WHERE email = "'+ options.email + '";', function(err, rows) {
-        if (err) throw err;
-
-        cb(rows);
-      });
-    },
-
-    getUserType: function(cb) {
-      db.query('SELECT typeID FROM chatboy.usertypes WHERE typeName = \'customer\';', function(err, rows){
-        if (err) throw err;
-        try{
-          userType = rows[0]['typeID'];
-        }catch(err){
-          throw new Error("Users/Model :: getUserType() : Error with getting the right userType ID");
-        }
-        
-        cb(userType);
-
-      });
-    },
-
-    update: function(cb) {
-    	// db.query('UPDATE ...', cb);
-    },
-
-    delete: function(cb) {
-    	// db.query('DELETE ...', cb);
+    if (!options.db) {
+        throw new Error('Options needs property `db` to retrieve the User Model');
     }
-  }
+
+    db = options.db;
+
+    return {
+
+        create: function (typeId, cb) {
+            if(typeof options.email === undefined || typeof options.name === undefined) {
+                throw new Error('Users/Model :: create() : Missing `email` or `name` from options object');
+            }
+
+            //no email found, create the new non-rep customer user
+            db.query('INSERT INTO users VALUES (NULL,"'+ options.name +'","'+ options.email +'", 1, '+ typeId +')', function(rows){
+                console.log("Users/Model :: create() : Record Inserted for new user!");
+                cb(rows);
+            });
+
+        },
+
+        get: function(cb) {
+            if(typeof options.email === undefined) {
+                throw new Error('Users/Model :: get() : Missing `email` from options object');
+            }
+                db.query('SELECT * FROM users WHERE email = "'+ options.email + '";', function(err, rows) {
+                if (err) throw err;
+
+                cb(rows);
+            });
+        },
+
+        getUserType: function(cb) {
+            db.query('SELECT typeId FROM chatboy.usertypes WHERE typeName = \'customer\';', function(err, rows){
+                if (err) throw err;
+                try{
+                    userType = rows[0]['typeId'];
+                }catch(err){
+                    throw new Error("Users/Model :: getUserType() : Error with getting the right userType Id");
+                }
+                
+                cb(userType);
+
+            });
+        },
+
+        update: function(cb) {
+            // db.query('UPDATE ...', cb);
+        },
+
+        delete: function(cb) {
+            // db.query('DELETE ...', cb);
+        }
+    }
 }
 
 module.exports = userModel;

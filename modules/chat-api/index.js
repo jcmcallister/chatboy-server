@@ -1,5 +1,6 @@
-var user = require("../users");
 var chat = require("../chat");
+var reps = require("../reps");
+var user = require("../users");
 
 var express = require("express");
 var app = module.exports = express();
@@ -30,28 +31,38 @@ app.post("/start/", function(req, res, next) {
 		return res.send(400);
 	}
 
-	console.info("Opening Chat for " + req.body.name + " (email: " + req.body.email + " )");
+	console.info("chat-api/start :: Opening Chat for " + req.body.name + " (email: " + req.body.email + " )");
 
 	var resData = {}, data = {};
 
 	req.session.name = req.body.name;
 	req.session.email = req.body.email;
 
-	//save the user's name & email into Users OR just get it if user already existed
-	user.create(req.session,function(userID){
-		console.log("chat-api/start :: user created in DB!");
-		data["userID"] = userID;
-		req.session.userID = userID;
-	});
+	//save the user's name & email into Users OR just get their Id if user already existed
+	console.log("chat-api/start :: saving user into DB!");
+	user.saveUserInfo(req.session, startNewSession);
 
-	//save the user's name & email into ChatSessions & hookup to ChatSessionUsers
-	chat.startNewSession();
-	
+	function startNewSession(userId){
+		console.log("chat-api/start :: starting new chat session!");
+		data["userId"] = userId;
+		req.session.userId = userId;
 
-	resData["chatID"] = "";
+		//assert: userId is the legit Id matching req.body.email, and is not undefined here
 
+		//save the user's name & email into ChatSessions & hookup to ChatSessionUsers
+		chat.startNewSession(data, returnResponse);
+	}
 
-	res.send(resData);
+	function returnResponse(chatData){
+		resData["chatData"] = chatData;
+
+		// send back what we got
+		res.send(resData);
+		next();
+	}
+
 });
 
-app.post("/message/", function(req, res, next) {});
+app.post("/message/", function(req, res, next) {
+
+});
