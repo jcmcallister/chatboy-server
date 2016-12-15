@@ -1,5 +1,6 @@
 var db = require("../db");
 var chatModel = require("./model");
+var observable = require("./chat-observable");
 
 module.exports = {
     create: function(data, cb) {
@@ -64,5 +65,13 @@ module.exports = {
 			cb(returnData);
 		}
     	
+    },
+    createListener: function(req, cb){
+    	observable.on('message', passTheMessage);
+
+    	function passTheMessage(text){
+    		console.log("chat/index :: message() : req.session.name said `" + text+ "`");
+    		// do something
+    	}
     }
 };
