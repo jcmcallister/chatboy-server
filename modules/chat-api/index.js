@@ -42,6 +42,7 @@ app.post("/start/", function(req, res, next) {
 	console.log("chat-api/start :: saving user into DB!");
 	user.saveUserInfo(req.session, startNewSession);
 
+
 	function startNewSession(userId){
 		console.log("chat-api/start :: starting new chat session!");
 		data["userId"] = userId;

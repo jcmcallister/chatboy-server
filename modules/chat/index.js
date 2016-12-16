@@ -1,6 +1,6 @@
 var db = require("../db");
 var chatModel = require("./model");
-var observable = require("./chat-observable");
+
 
 module.exports = {
     create: function(data, cb) {
