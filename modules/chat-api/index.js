@@ -1,9 +1,11 @@
 var chat = require("../chat");
+// var listener = require("../chat/listener").create();
 var reps = require("../reps");
 var user = require("../users");
 
 var express = require("express");
 var app = module.exports = express();
+var dateFormat = require('dateformat');
 
 
 app.post("/availableStatus/", function(req, res, next) {
@@ -46,18 +48,21 @@ app.post("/start/", function(req, res, next) {
 	function startNewSession(userId){
 		console.log("chat-api/start :: starting new chat session!");
 		data["userId"] = userId;
+		resData["userId"] = userId;
 		req.session.userId = userId;
 
 		//assert: userId is the legit Id matching req.body.email, and is not undefined here
 
 		//save the user's name & email into ChatSessions & hookup to ChatSessionUsers
-		chat.startNewSession(data, returnResponse);
+		chat.startNewSession(data, chatCreated);
 	}
 
-	function returnResponse(chatData){
+	function chatCreated(chatData){
 		resData["chatData"] = chatData;
 
-		// send back what we got
+		// listenForMessages();
+
+		// send back the "we're set up" signal
 		res.send(resData);
 		next();
 	}
@@ -65,13 +70,33 @@ app.post("/start/", function(req, res, next) {
 });
 
 app.post("/message/", function(req, res, next) {
-	console.info("chat-api/message :: Message received!");
+	reconnectSession(req, messageHandler);
+
+	function messageHandler() {
+		console.info("chat-api/message :: RECV Message => " + req.session.name + ": " + req.body.msg + " (user " + req.session.userId + ", in Chat " + req.body.chatId + ")");
+		//console.info("chat-api/message :: " + JSON.stringify(req.body) );// we should have msg and chatId
+
+		//send the message to the other chatroom members!
+		/*listener.broadcast({
+			"message" : req.body.msg,
+			"from": req.session.name,
+			"fromId" : req.session.userId,
+			"timestamp" : dateFormat(),
+		});*/
+
+		//save the message into the DB
+
+		// res.send("message recd at " + dateFormat());	
+	}
 });
 
 app.post("/status/", function(req, res, next) {
-	if(req.body.chatid) {
-		console.info("chat-api/status :: Checking status of chat " + req.body.chatid);
-		chat.getStatus(req.body.chatid, handleStatus);
+
+	//pass in "reconnect" as a boolean value and we'll send a backfill of messages
+
+	if(req.body.chatId && req.body.userId) {
+		// console.info("chat-api/status :: Checking status of chat " + req.body.chatId);
+		chat.getStatus(req.body.chatId, handleStatus);
 	}
 
 
@@ -80,24 +105,49 @@ app.post("/status/", function(req, res, next) {
 			status: chatStatus
 		};
 
-		if(chatStatus === "ongoing" && req.body.reconnect) {
-			data.reconnected = attemptReconnect();
-		} else {
-			res.send(data);
-		}
-
+		reconnectSession(req, function(){
+			if(["ongoing","inprogress"].indexOf(chatStatus) >= 0 && req.body.reconnect) {
+				data.reconnected = reconnectToChat();
+			} else {
+				res.send(data);
+			}
+		});
 	}
 
-	function attemptReconnect() {
+	function reconnectToChat() {
 		var rv = false;
 
-		//to reconnect, we: fetch a message log
-		chat.getMessages(req.body.chatid, function(transcript){
+		//to reconnect, we: fetch a message log & subscribe the user to the chatroom listener
+		chat.getMessages(req.body.chatid,req.body.userId, function(transcript){
 			data.messageLog = transcript;
+			// listenForMessages();
 			res.send(data);
 		});
-
-
 	}
 
 });
+
+
+function reconnectSession(req, cb) {
+	// console.log("Session Reconnect :: req = " + JSON.stringify(req.body));
+	if(req.body && req.body.userId) {
+		user.get(req.body.userId, function(userObj){
+			console.log("Session Reconnect :: userObj = " + JSON.stringify(userObj));
+			if (userObj) {
+				req.session.name = userObj.name;
+				req.session.email = userObj.email;
+				req.session.userId = userObj.id;
+			}
+			cb();
+		});
+	}else {
+		cb();
+	}
+};
+
+function listenForMessages() {
+	listener.on('message', function (data) {  
+		console.log(req.session.name + "(user " + req.session.userId + ") got a new message!" + JSON.stringify(data) );
+		res.send(data);
+	});
+};

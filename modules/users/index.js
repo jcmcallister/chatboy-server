@@ -14,7 +14,7 @@ module.exports = {
     			userId = -1;
 
     		//does this user exist already?
-    		user.get(function(rows){
+    		user.getByEmail(function(rows){
 
 		        if(rows.length == 0) {
 		        	//no user found
@@ -39,7 +39,22 @@ module.exports = {
     	}
     },
     get: function(id, cb) {
+        var options = {
+            db: db,
+            id: id
+        };
+        var user = userModel(options);
 
+        user.get(function(rows){
+            if(rows.length > 0) {
+                if(rows.length > 1) {
+                    console.warn("duplicate user found!");
+                }
+                cb(rows[0]);
+            }else {
+                cb(undefined);
+            }
+        });
     },
     update: function(data, cb) {
 

@@ -21,10 +21,19 @@ function userModel (options) {
             });
 
         },
-
         get: function(cb) {
+            if(typeof options.id === undefined) {
+                throw new Error('Users/Model :: get() : Missing `id` from options object');
+            }
+                db.query('SELECT * FROM users WHERE id = "'+ options.id + '";', function(err, rows) {
+                if (err) throw err;
+
+                cb(rows);
+            });
+        },
+        getByEmail: function(cb) {
             if(typeof options.email === undefined) {
-                throw new Error('Users/Model :: get() : Missing `email` from options object');
+                throw new Error('Users/Model :: getByEmail() : Missing `email` from options object');
             }
                 db.query('SELECT * FROM users WHERE email = "'+ options.email + '";', function(err, rows) {
                 if (err) throw err;

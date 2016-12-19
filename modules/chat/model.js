@@ -60,7 +60,7 @@ function chatModel (options) {
             //does the chat exist?
             db.query('SELECT * FROM ChatSessions WHERE chatID = '+ db.escape(chatId) +';', function(err, chatResult) {
                 if(chatResult.length > 0){
-                    console.log(JSON.stringify(chatResult) );
+                    // console.log(JSON.stringify(chatResult) );
                     //if so, were there any reps in the room?
                     db.query('SELECT * FROM ChatSessionUsers where chatid = '+db.escape(chatId)+ ' and userID IN (select id from users where users.typeid = (select typeId FROM usertypes WHERE typeName = \'rep\'));', 
                         function(err, repCheckResult){
