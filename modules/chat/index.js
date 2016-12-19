@@ -7,7 +7,23 @@ module.exports = {
 
     },
     get: function(id, cb) {
-
+		var model = chatModel({db : db});    	
+		model.getChat(id, function(data) {
+			// console.log("chat/index :: get() : just got some data!" + JSON.stringify(data));
+			cb(data);
+		});
+    },
+    getMessages: function(id, cb) {
+		var model = chatModel({db : db});    	
+		model.getChatTranscript(id, function(data) {
+			cb(data);
+		});
+    },
+    getStatus: function(id, cb) {
+		var model = chatModel({db : db});    	
+		model.getChatState(id, function(data) {
+			cb(data);
+		});
     },
     update: function(data, cb) {
 
@@ -34,10 +50,10 @@ module.exports = {
 			console.log("chat/index :: startNewSession() : adding current user to chat...");
 
 			returnData["chatId"] = chatId;
-			model.createChatUser(chatId, data.userId, reelInARep);
+			model.createChatUser(chatId, data.userId, repLookup);
 		}
 
-		function reelInARep(){
+		function repLookup(){
 			console.log("chat/index :: startNewSession() : looking for a rep...");
 			// now we get the available rep's attention...
 			model.requestRep(returnData.chatId, addRepToChat);
@@ -65,6 +81,11 @@ module.exports = {
 			cb(returnData);
 		}
     	
+    },
+    connect: function(req,cb) {
+    	// an UPSERT
+
+
     },
     createListener: function(req, cb){
     	observable.on('message', passTheMessage);

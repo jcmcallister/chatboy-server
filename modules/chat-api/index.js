@@ -65,5 +65,39 @@ app.post("/start/", function(req, res, next) {
 });
 
 app.post("/message/", function(req, res, next) {
+	console.info("chat-api/message :: Message received!");
+});
+
+app.post("/status/", function(req, res, next) {
+	if(req.body.chatid) {
+		console.info("chat-api/status :: Checking status of chat " + req.body.chatid);
+		chat.getStatus(req.body.chatid, handleStatus);
+	}
+
+
+	function handleStatus(chatStatus){
+		var data = {
+			status: chatStatus
+		};
+
+		if(chatStatus === "ongoing" && req.body.reconnect) {
+			data.reconnected = attemptReconnect();
+		} else {
+			res.send(data);
+		}
+
+	}
+
+	function attemptReconnect() {
+		var rv = false;
+
+		//to reconnect, we: fetch a message log
+		chat.getMessages(req.body.chatid, function(transcript){
+			data.messageLog = transcript;
+			res.send(data);
+		});
+
+
+	}
 
 });

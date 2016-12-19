@@ -35,7 +35,8 @@ function repModel (options) {
     },
     logout: function(cb) {
       db.query('UPDATE users SET active = false WHERE id = ' + options.repId + ';', cb);  
-    }
+    },
+    connectToChat: function (chatid, cb) {}
   };
 }
 

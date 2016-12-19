@@ -10,8 +10,6 @@ app.locals.cache = new NodeCache({ stdTTL: 300, checkperiod: 30 });
 
 
 app.post('/', function(req, res, next) {
-	console.log("REP API: hello from the /api/reps route");
-	console.log("REP API: you sent this request " + JSON.stringify(req.body) );
     // users.create(req.body, function(err, user) {
     //     if(err) return next(err); // do something on error
     //     res.json(user); // return user json if ok
@@ -19,10 +17,8 @@ app.post('/', function(req, res, next) {
 });
 
 app.post('/check', function(req,res,next){
-	console.log("REP API: HELLO FROM REP CHECK ");
 
 	reps.checkIfAvailable(req,function(result){
-    	console.log("are there reps online now? " + result);
     	res.send(result);
     });
 }); // reps may have multiple users waiting to chat at a time
